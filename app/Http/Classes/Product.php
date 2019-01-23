@@ -8,14 +8,21 @@ abstract class Product implements \Interfaces\Product
     private $name;
     private $price;
 
-    public function getName()
+    public final function setPrice($price = null)
     {
-        return $this->name;
+        if (isset($price) && Validator::isPositive($price)) {
+            $this->price = $price;
+        }
+        return $this;
     }
 
-    public function getPrice()
+    public final function getPrice()
     {
-        return $this->price;
+        if (Validator::isPositive($this->price)) {
+            return $this->price;
+        } else {
+            throw new \Exception('attempt to use invalid price = ' . $this->price);
+        }
     }
 
     public function setName($name)
@@ -23,8 +30,10 @@ abstract class Product implements \Interfaces\Product
         $this->name = $name;
     }
 
-    public function setPrice($price)
+    public function getName()
     {
-        $this->price = $price;
+        return $this->name;
     }
+
+
 }

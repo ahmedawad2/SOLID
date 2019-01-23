@@ -19,10 +19,15 @@ class Test extends Controller
 //        $sec = $a->apply();
 //        dd($first, $sec);
 
-        $newPrice = GetDiscountInstance::getInstance(GetDiscountInstance::DISCOUNT_TYPE_CONCRETE)
-            ->setPrice(100)
-            ->setAmount(50)
-            ->apply();
-        dd($newPrice);
+//        $newPrice = GetDiscountInstance::getInstance(GetDiscountInstance::DISCOUNT_TYPE_CONCRETE)
+//            ->setPrice(100)
+//            ->setAmount(50)
+//            ->apply();
+//        dd($newPrice);
+    }
+
+    public function index()
+    {
+
     }
 }
