@@ -2,11 +2,11 @@
 
 namespace Classes;
 
-abstract class Discount extends Validator implements \Interfaces\Discount
+abstract class Discount implements \Interfaces\Discount
 {
-    protected $name;
-    protected $amount;
-    private $price = 0;
+    private $name;
+    private $amount;
+    private $price;
 
 
     public function getName()
@@ -14,15 +14,21 @@ abstract class Discount extends Validator implements \Interfaces\Discount
         return $this->name;
     }
 
-    public function getAmount()
+    public final function getAmount()
     {
-        return $this->amount;
+        if (Validator::isPositive($this->amount)) {
+            return $this->amount;
+        } else {
+            throw new \Exception('attempt to use invalid amount = ' . $this->amount);
+        }
     }
 
-    public function getPrice()
+    public final function getPrice()
     {
-        if ($this->validateDiscountPrice()) {
+        if (Validator::isPositive($this->price)) {
             return $this->price;
+        } else {
+            throw new \Exception('attempt to use invalid price = ' . $this->price);
         }
     }
 
@@ -31,25 +37,20 @@ abstract class Discount extends Validator implements \Interfaces\Discount
         $this->name = $name;
     }
 
-    public function setAmount($amount)
+    public final function setAmount($amount = null)
     {
-        $this->amount = $amount;
+        if (isset($amount) && Validator::isPositive($amount)) {
+            $this->amount = $amount;
+        }
+        return $this;
     }
 
-    public function setPrice($price)
+    public final function setPrice($price = null)
     {
-        if ($this->validateDiscountPrice($price)) {
+        if (isset($price) && Validator::isPositive($price)) {
             $this->price = $price;
         }
+        return $this;
     }
 
-    protected function validateDiscountPrice($price = null): bool
-    {
-        $price = isset($price) ? $price : $this->price;
-        if (floatval($price) <= 0) {
-//            throw new \Exception('can not interact with a price = ' . $this->price);
-            return false;
-        }
-        return true;
-    }
 }

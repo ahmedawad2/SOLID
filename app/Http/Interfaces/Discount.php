@@ -2,19 +2,7 @@
 
 namespace Interfaces;
 
-interface Discount
+interface Discount extends OwnPrice
 {
-    public function getName();
-
-    public function getAmount();
-
-    public function getPrice();
-
-    public function setAmount($amount);
-
-    public function setName($name);
-
-    public function setPrice($price);
-
     public function apply();
 }
