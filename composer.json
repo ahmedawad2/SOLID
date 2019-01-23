@@ -24,12 +24,15 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+          "Classes\\": "app/Http/Classes",
+          "Interfaces\\": "app/Http/Interfaces"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Classes\\": "app/Http/Classes"
         }
     },
     "extra": {
