@@ -21,6 +21,4 @@ class BundleProduct extends Product
             $this->setPrice($total);
         }
     }
-
-
 }

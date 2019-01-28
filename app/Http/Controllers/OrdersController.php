@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Discount;
-use Classes\Product;
+use App\Order;
+use App\Product;
+use Classes\GetDiscountInstance;
 use Illuminate\Http\Request;
 
-class ProductsController extends Controller
+class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,33 +26,38 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        $discounts = Discount::all()->toArray();
-        $products = \App\Product::all()->toArray();
+        $products = Product::all()->toArray();
+
+        $number = rand(1, count($products));
 
 
-        $name = str_random(10);
-
-        $discount = ($discounts[array_rand($discounts)]);
-        $discount = null;
-
-        $collection = ($products[array_rand($products)]);
-        $collection = null;
-
-        $price = rand(10, 200);
-//        $price = null;
-
-        $newProduct = [
-            'name' => $name,
-            'price' => $price
-        ];
-        if (isset($discount)) {
-            $newProduct['discount'] = $discount;
+//        dd($products);
+        $newOrder = [];
+        $total = 0;
+        for ($i = 0; $i < $number; $i++) {
+            $amount = rand(1, 5);
+            $product = $products[array_rand($products)];
+            $newOrder[] = [
+                'product' => $product,
+                'amount' => $amount
+            ];
+            $total += $this->manipulateOrderProduct($product);
         }
-        if (isset($collection)) {
-            $newProduct['collection'] = $collection;
+        $newOrder['price'] = $total;
+        $newOrder = Order::create($newOrder);
+        dd($newOrder);
+    }
+
+    private function manipulateOrderProduct($product = array())
+    {
+        $price = $product['price'];
+        if (array_key_exists('discount', $product)) {
+
+            $price = GetDiscountInstance::getInstance($product['discount']['type'])->setPrice($price)
+                ->setAmount($product['discount']['amount'])
+                ->apply();
         }
-        \App\Product::create($newProduct);
-        dd('done');
+        return $price;
     }
 
     /**
